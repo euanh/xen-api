@@ -577,15 +577,15 @@ module MD = struct
 		let devs = devs @ unmanaged in
 
 		let open Pci in
-		List.map
-			(fun (idx, (domain, bus, dev, fn)) -> {
+		List.mapi
+			(fun idx (domain, bus, dev, fn) -> {
 				id = (vm.API.vM_uuid, Printf.sprintf "%04x:%02x:%02x.%01x" domain bus dev fn);
 				position = idx;
 				address = {domain; bus; dev; fn};
 				msitranslate = None;
 				power_mgmt = None;
 			})
-			(List.combine (Range.to_list (Range.make 0 (List.length devs))) devs)
+			devs
 
 	let get_target_pci_address ~__context vgpu =
 		let pgpu =
